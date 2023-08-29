@@ -1,0 +1,300 @@
+'use strict';
+const MANIFEST = 'flutter-app-manifest';
+const TEMP = 'flutter-temp-cache';
+const CACHE_NAME = 'flutter-app-cache';
+
+const RESOURCES = {"canvaskit/canvaskit.js": "76f7d822f42397160c5dfc69cbc9b2de",
+"canvaskit/skwasm.js": "1df4d741f441fa1a4d10530ced463ef8",
+"canvaskit/skwasm.worker.js": "19659053a277272607529ef87acf9d8a",
+"canvaskit/chromium/canvaskit.js": "8c8392ce4a4364cbb240aa09b5652e05",
+"canvaskit/chromium/canvaskit.wasm": "fc18c3010856029414b70cae1afc5cd9",
+"canvaskit/skwasm.wasm": "6711032e17bf49924b2b001cef0d3ea3",
+"canvaskit/canvaskit.wasm": "f48eaf57cada79163ec6dec7929486ea",
+".git/hooks/pre-commit.sample": "305eadbbcd6f6d2567e033ad12aabbc4",
+".git/hooks/fsmonitor-watchman.sample": "a0b2633a2c8e97501610bd3f73da66fc",
+".git/hooks/pre-rebase.sample": "56e45f2bcbc8226d2b4200f7c46371bf",
+".git/hooks/commit-msg.sample": "579a3c1e12a1e74a98169175fb913012",
+".git/hooks/push-to-checkout.sample": "c7ab00c7784efeadad3ae9b228d4b4db",
+".git/hooks/sendemail-validate.sample": "4d67df3a8d5c98cb8565c07e42be0b04",
+".git/hooks/pre-applypatch.sample": "054f9ffb8bfe04a599751cc757226dda",
+".git/hooks/post-update.sample": "2b7ea5cee3c49ff53d41e00785eb974c",
+".git/hooks/pre-receive.sample": "2ad18ec82c20af7b5926ed9cea6aeedd",
+".git/hooks/applypatch-msg.sample": "ce562e08d8098926a3862fc6e7905199",
+".git/hooks/update.sample": "647ae13c682f7827c22f5fc08a03674e",
+".git/hooks/pre-push.sample": "2c642152299a94e05ea26eae11993b13",
+".git/hooks/pre-merge-commit.sample": "39cb268e2a85d436b9eb6f47614c3cbc",
+".git/hooks/prepare-commit-msg.sample": "2b5c047bdb474555e1787db32b2d2fc5",
+".git/refs/heads/master": "31ac4d40ae936f59889718c882486495",
+".git/refs/remotes/origin/master": "31ac4d40ae936f59889718c882486495",
+".git/COMMIT_EDITMSG": "678e5e019a79526d0fcca5e29f6e5f78",
+".git/logs/refs/heads/master": "3ecbe0b6245652c33d732e53bbd5fac4",
+".git/logs/refs/remotes/origin/master": "1a2b2ce3c794f68aa2ce85e063c8a94b",
+".git/logs/HEAD": "3ecbe0b6245652c33d732e53bbd5fac4",
+".git/index": "735160af93da61e3d55a59e22e4a582e",
+".git/objects/37/7580cbf691d03aea79c63a3a251b1b48ac01f1": "c196d282a50e3c372b4445c6b8868297",
+".git/objects/f0/8771bde45f17cb16f692a8b8a0871ce6783774": "dc696bfb4eb8e5e314941246afbabf8b",
+".git/objects/f0/a3ff8f410a990d5077c6d2a9e8a88a25959501": "1f6f12d2f0c20fa2da022f043643a595",
+".git/objects/db/a38f40909ea7591483d7aab41cf732870085a0": "710b058d59a3232aafc1d975621429f6",
+".git/objects/84/966a3891393c2b2ab8e94a5ba8e20d9236856b": "54b9ccd84a45decb23846e6268aa7629",
+".git/objects/6c/7dc7c99c5e8c9684df3f11e4f3a242af673d46": "df50cb35d0d11ad0a1c8103cb1543315",
+".git/objects/64/507f9ab3d6db8ea4692e610c7fe55f252df78b": "1a1b80de6e5cb0ffd42d389feeae27be",
+".git/objects/51/34e6402246228fb7f58ce8fe76727a61d99a62": "6b5e5b48febe40daec7062aecdc3b39f",
+".git/objects/b9/335d5e6572d01be7ac5059dee330f66430fe71": "8f3684e6bcd766bb77f27b2ad2ca7d44",
+".git/objects/b9/2a0d854da9a8f73216c4a0ef07a0f0a44e4373": "f62d1eb7f51165e2a6d2ef1921f976f3",
+".git/objects/6e/8d1075d8605ff70413ab31f4fa8dfb48b550d2": "1d8f2b2dbd17f829552707d874c1fcde",
+".git/objects/a7/1364ae7762cb52466817b39b6cb6d1e2adb202": "657a19b8ebc3ca8967d95991f6904df3",
+".git/objects/e3/3e3cb97ef36395df188f46777d2028fb9db655": "e9099d8399daac8bd8e2fed703b58d8e",
+".git/objects/8a/aa46ac1ae21512746f852a42ba87e4165dfdd1": "1d8820d345e38b30de033aa4b5a23e7b",
+".git/objects/8a/73cd0bc6f94f4bc28d179e97b3db4ffe216e31": "d5f85faaa803530dbc3d7eccab64bef2",
+".git/objects/f6/8170bfc457c8b715d3a35264ce011ae1642933": "aa41ee3c86e861b5717fa53b5396bf27",
+".git/objects/b2/2fdb2d1fa6a3bced274617d58f6ab432bb0d8b": "1b405e4dfab487f51d41422d52600614",
+".git/objects/b2/bf6120d91dc58a570e352a70aaccd512bf1b56": "e407dfc43645824f9bfd1cc26b7e26f8",
+".git/objects/bb/ac29f5ef7a40bf14c0901bc1457724156bc0de": "1393f20f0610cabefe2d4f45865b0f54",
+".git/objects/b3/d7fb68b8474009d4f5ebc7ed5c6d95cc233bce": "a0e774d33ddc4ddd496b3acc2503e490",
+".git/objects/0b/85bcdb86bf9e9f9fda81b13cec9c9349d47d77": "77cbf4b6cc88e2471afd14a98ef2e0ed",
+".git/objects/98/fc62ec4c5ae596845aaa1c3aba3d53de483a34": "dd8c60efd03ac984d72af3633e21e815",
+".git/objects/45/bc3d35e96d714ba12abb9baa27cc568657e719": "d307a2672cf325c715b261055274a518",
+".git/objects/20/64749d611a7146b89f75be79813a32a9ea465e": "ab12ffd463d532a29c7af9db650f8d87",
+".git/objects/20/58b4748e288d614d58394c01ff83f9d3e53f07": "e947d291eca3b36358c0eef66d71ddb9",
+".git/objects/92/185a51dd00c3ecb92e9f8d858a0f9dd6771168": "19750e3aee51a1654f7676765f9e086e",
+".git/objects/86/203b81337caf5a9226a5b7cb8e898f45fa8f58": "a0004023ea5ce54cb79b9c81605109ba",
+".git/objects/49/da5136fc722f4f540cdbfb7bf0abea79ab74a7": "5eeba39ea506e3aec55d354fdd9d4266",
+".git/objects/b7/49bfef07473333cf1dd31e9eed89862a5d52aa": "36b4020dca303986cad10924774fb5dc",
+".git/objects/0e/597d8933905b23dc267b3205fda4a1083cdcee": "f2a45f1b5b0ece449d213038139d0b3c",
+".git/objects/97/027f781a8e96aa56c4db19a3cd7e1258e40cdd": "f7fbee05bda73ec6c8fd60733dc5a5e0",
+".git/objects/6f/b01ede69951b2c43aec98fa43701b6e1a9ac0f": "c6d1636c2f729178816769d0cf7af2e1",
+".git/objects/35/91af41948adc8001f3586d76b91181311953fc": "c91d33b29071dcff3b2b3385383761cb",
+".git/objects/70/010cc4761157d9d7cc2d082cf342e63fe1190a": "baf21d1dacab382149ee93266543ff40",
+".git/objects/8d/9fdab47440fb1b6c34c1462d008ea7f3e20ec0": "6c815d99bf1a73efc885d153f29f919d",
+".git/objects/1f/686edd1465272558af328ca43cb7189a0059e6": "5e83820f6d3e5392693d45bc239b2b61",
+".git/objects/88/cfd48dff1169879ba46840804b412fe02fefd6": "e42aaae6a4cbfbc9f6326f1fa9e3380c",
+".git/objects/03/c531a7a4eadfbb97e5434401927ee31890cf33": "fe6b24f60048b7f218835d95c2c650ae",
+".git/objects/07/4f68c73d71ec3f28e5b5a916f856d80180b8bc": "ddad2db733b6e7a055527499534215cf",
+".git/objects/12/1309fc7d64b1ce6ac0aa9872064b02a4deed08": "dab794ff1a37c37cd94ba57e64e1a771",
+".git/objects/1e/bf993c04c08e17a0122730f8d7ce6e139c8bad": "eeb4f0d71f24758335fe1753273ad6c2",
+".git/objects/fa/a0c5fd41aeccbbc85baf91d0133a432189785e": "89891848657daf8d04653c3c957b4427",
+".git/objects/62/9022fe7eee9e76d6b4972169bc081e4a494965": "11715f0e9ea80bf3c7299a7897aa63a8",
+".git/objects/62/a01d6826913d9efa140d2e9f4bc0f13918e607": "44ba2af6a4f05cb190463143170ae010",
+".git/objects/26/03ad39c7395a37ef2d15d674948e748a1de2ce": "ef4da16cd8465880d15c4901b5c51dc7",
+".git/objects/fc/8fc5a50c3fb4a6373e49ce5da66f139dc367d0": "53703ba3d0c1878006d1f2b43e26a1a1",
+".git/objects/d3/efa7fd80d9d345a1ad0aaa2e690c38f65f4d4e": "610858a6464fa97567f7cce3b11d9508",
+".git/objects/42/0bf703b4facb9fdd2915c4e823e407476e7f60": "3b44f6d362e5f2775ff30989538f248a",
+".git/objects/3a/bf18c41c58c933308c244a875bf383856e103e": "30790d31a35e3622fd7b3849c9bf1894",
+".git/objects/eb/9b4d76e525556d5d89141648c724331630325d": "37c0954235cbe27c4d93e74fe9a578ef",
+".git/objects/b5/3085647a4a6d2a6b32d4a13b7a5ffbfd2080f7": "d78dcbcef0f0816b1dc6b97257c6d658",
+".git/objects/b5/bdb075c6bccf8e47b2af4c1b5984a3aee95544": "3da73ad6ded50844bdd1d4a783fff828",
+".git/objects/b5/084c11a2a7c0f12914768f8966abcb8c95ea2d": "ca19bcfabaee4a7f3cad463da50b8c3c",
+".git/objects/32/2efd071d4c22751cf3afd81eb9f67440ccfb5e": "9367152abcdd737cdfc056b51e145dbb",
+".git/objects/e5/e146324b05123b531f59fa854e4a9dda31ac7d": "054e0f44bcb27d4a702aeccf841556ef",
+".git/objects/d6/9c56691fbdb0b7efa65097c7cc1edac12a6d3e": "868ce37a3a78b0606713733248a2f579",
+".git/description": "a0a7c3fff21f2aea3cfa1d0316dd816c",
+".git/config": "603301721b98bf4a424edbb2fc6743cd",
+".git/info/exclude": "036208b4a1ab4a235d75c181e685e5a3",
+".git/HEAD": "4cf2d64e44205fe628ddd534e1151b58",
+"assets/NOTICES": "3d665f8473203a645716bcbc6348b3d6",
+"assets/AssetManifest.bin": "8d763cedc6005e5a0f65d65eb1399a45",
+"assets/shaders/ink_sparkle.frag": "f8b80e740d33eb157090be4e995febdf",
+"assets/assets/images/asian-girl.png": "0927e182c5032034febdae5d4d5b0f84",
+"assets/assets/images/thao-anh.png": "991a95d9dd5a3e914e37c77f219b7e27",
+"assets/assets/images/digital-marketing-big.png": "a6eed6053e2e06adffdb5934b98b1dc9",
+"assets/assets/images/idea.png": "23ee29695bea651f0de586c9af0816cf",
+"assets/assets/images/brand-marketing.png": "59c72ddb922419d83668ecfad1a1503a",
+"assets/assets/images/arrow_up.svg": "2d73a9cfcbbde8b68782d9246bf7308a",
+"assets/assets/images/branding-marketing-big.png": "f28e3aa3f7a97db0823a821dfe58b65b",
+"assets/assets/images/logo.svg": "fe4267b591d5490a1937f2fc8053ff6d",
+"assets/assets/images/digital-marketing.png": "2b6396dde7bd9f7dfcefa31517fb7608",
+"assets/assets/images/contact.png": "e649f6568eaa0a040bdbe716caa180db",
+"assets/assets/images/the-long.png": "258f1b1e63adf01582c86f8d6b8f82e2",
+"assets/assets/images/arrow.svg": "414ba3d69ec54beda4bd2ead5018e379",
+"assets/assets/images/arrow_up.png": "9cfbce7fab1f73f696b67c7422be461c",
+"assets/assets/images/smiling-boy.png": "244c9328cfe8113dbc304aa779fb052b",
+"assets/assets/images/branding-mkt-3.png": "fe28dfe2eb8e591a1436107f66540007",
+"assets/assets/images/anh-dang-phu-vinh-ceo-adsota.png": "edc5c60c4c55821f7347e0b0519454bb",
+"assets/assets/images/digital-mkt-3.png": "c1e22fe412be39d70caaf172bb176b33",
+"assets/assets/images/apply.png": "afeaa092c617f20f031c5280cef23375",
+"assets/assets/images/Ch%25E1%25BB%258B%2520Ho%25C3%25A0ng%2520Th%25E1%25BA%25A3o%2520Anh%2520-%2520CMO%2520Adsota%2520Agency%25201.png": "d429b9e25195f92e63e8c720e90839bd",
+"assets/assets/images/phu-vinh.png": "072e5d65086f3583338a2f4f447fd1a7",
+"assets/assets/images/develop.png": "e2ca11188db174d80c97f02d796ccd31",
+"assets/FontManifest.json": "7b2a36307916a9721811788013e65289",
+"assets/fonts/MaterialIcons-Regular.otf": "8ed8362dff0f14b5427922950f9714e2",
+"assets/AssetManifest.json": "4e49087230944ec8a3815e544b8bb40d",
+"flutter.js": "6fef97aeca90b426343ba6c5c9dc5d4a",
+"icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
+"icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
+"icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
+"icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
+"main.dart.js": "3434f16697f2c25b90f259ee50e38c25",
+"manifest.json": "e5d5808a7f34573880b0ce1511f854ac",
+"favicon.png": "5dcef449791fa27946b3d35ad8803796",
+"index.html": "1bfb7421353c7d3a3edcfade984bc3cb",
+"/": "1bfb7421353c7d3a3edcfade984bc3cb",
+"version.json": "17b23d1c8ea1e967ab4c787e4aa7bee2"};
+// The application shell files that are downloaded before a service worker can
+// start.
+const CORE = ["main.dart.js",
+"index.html",
+"assets/AssetManifest.json",
+"assets/FontManifest.json"];
+
+// During install, the TEMP cache is populated with the application shell files.
+self.addEventListener("install", (event) => {
+  self.skipWaiting();
+  return event.waitUntil(
+    caches.open(TEMP).then((cache) => {
+      return cache.addAll(
+        CORE.map((value) => new Request(value, {'cache': 'reload'})));
+    })
+  );
+});
+// During activate, the cache is populated with the temp files downloaded in
+// install. If this service worker is upgrading from one with a saved
+// MANIFEST, then use this to retain unchanged resource files.
+self.addEventListener("activate", function(event) {
+  return event.waitUntil(async function() {
+    try {
+      var contentCache = await caches.open(CACHE_NAME);
+      var tempCache = await caches.open(TEMP);
+      var manifestCache = await caches.open(MANIFEST);
+      var manifest = await manifestCache.match('manifest');
+      // When there is no prior manifest, clear the entire cache.
+      if (!manifest) {
+        await caches.delete(CACHE_NAME);
+        contentCache = await caches.open(CACHE_NAME);
+        for (var request of await tempCache.keys()) {
+          var response = await tempCache.match(request);
+          await contentCache.put(request, response);
+        }
+        await caches.delete(TEMP);
+        // Save the manifest to make future upgrades efficient.
+        await manifestCache.put('manifest', new Response(JSON.stringify(RESOURCES)));
+        // Claim client to enable caching on first launch
+        self.clients.claim();
+        return;
+      }
+      var oldManifest = await manifest.json();
+      var origin = self.location.origin;
+      for (var request of await contentCache.keys()) {
+        var key = request.url.substring(origin.length + 1);
+        if (key == "") {
+          key = "/";
+        }
+        // If a resource from the old manifest is not in the new cache, or if
+        // the MD5 sum has changed, delete it. Otherwise the resource is left
+        // in the cache and can be reused by the new service worker.
+        if (!RESOURCES[key] || RESOURCES[key] != oldManifest[key]) {
+          await contentCache.delete(request);
+        }
+      }
+      // Populate the cache with the app shell TEMP files, potentially overwriting
+      // cache files preserved above.
+      for (var request of await tempCache.keys()) {
+        var response = await tempCache.match(request);
+        await contentCache.put(request, response);
+      }
+      await caches.delete(TEMP);
+      // Save the manifest to make future upgrades efficient.
+      await manifestCache.put('manifest', new Response(JSON.stringify(RESOURCES)));
+      // Claim client to enable caching on first launch
+      self.clients.claim();
+      return;
+    } catch (err) {
+      // On an unhandled exception the state of the cache cannot be guaranteed.
+      console.error('Failed to upgrade service worker: ' + err);
+      await caches.delete(CACHE_NAME);
+      await caches.delete(TEMP);
+      await caches.delete(MANIFEST);
+    }
+  }());
+});
+// The fetch handler redirects requests for RESOURCE files to the service
+// worker cache.
+self.addEventListener("fetch", (event) => {
+  if (event.request.method !== 'GET') {
+    return;
+  }
+  var origin = self.location.origin;
+  var key = event.request.url.substring(origin.length + 1);
+  // Redirect URLs to the index.html
+  if (key.indexOf('?v=') != -1) {
+    key = key.split('?v=')[0];
+  }
+  if (event.request.url == origin || event.request.url.startsWith(origin + '/#') || key == '') {
+    key = '/';
+  }
+  // If the URL is not the RESOURCE list then return to signal that the
+  // browser should take over.
+  if (!RESOURCES[key]) {
+    return;
+  }
+  // If the URL is the index.html, perform an online-first request.
+  if (key == '/') {
+    return onlineFirst(event);
+  }
+  event.respondWith(caches.open(CACHE_NAME)
+    .then((cache) =>  {
+      return cache.match(event.request).then((response) => {
+        // Either respond with the cached resource, or perform a fetch and
+        // lazily populate the cache only if the resource was successfully fetched.
+        return response || fetch(event.request).then((response) => {
+          if (response && Boolean(response.ok)) {
+            cache.put(event.request, response.clone());
+          }
+          return response;
+        });
+      })
+    })
+  );
+});
+self.addEventListener('message', (event) => {
+  // SkipWaiting can be used to immediately activate a waiting service worker.
+  // This will also require a page refresh triggered by the main worker.
+  if (event.data === 'skipWaiting') {
+    self.skipWaiting();
+    return;
+  }
+  if (event.data === 'downloadOffline') {
+    downloadOffline();
+    return;
+  }
+});
+// Download offline will check the RESOURCES for all files not in the cache
+// and populate them.
+async function downloadOffline() {
+  var resources = [];
+  var contentCache = await caches.open(CACHE_NAME);
+  var currentContent = {};
+  for (var request of await contentCache.keys()) {
+    var key = request.url.substring(origin.length + 1);
+    if (key == "") {
+      key = "/";
+    }
+    currentContent[key] = true;
+  }
+  for (var resourceKey of Object.keys(RESOURCES)) {
+    if (!currentContent[resourceKey]) {
+      resources.push(resourceKey);
+    }
+  }
+  return contentCache.addAll(resources);
+}
+// Attempt to download the resource online before falling back to
+// the offline cache.
+function onlineFirst(event) {
+  return event.respondWith(
+    fetch(event.request).then((response) => {
+      return caches.open(CACHE_NAME).then((cache) => {
+        cache.put(event.request, response.clone());
+        return response;
+      });
+    }).catch((error) => {
+      return caches.open(CACHE_NAME).then((cache) => {
+        return cache.match(event.request).then((response) => {
+          if (response != null) {
+            return response;
+          }
+          throw error;
+        });
+      });
+    })
+  );
+}
